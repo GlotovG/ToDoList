@@ -12,8 +12,16 @@ class ToDoListViewController: UITableViewController {
 
     var toDoListArray = ["Купить молока", "Купить черный хлеб", "Купить яиц"]
     
+    //константа для сохранения данных при закрытии приложения
+    let defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //перезапись данных массива toDoListArray из сохраненного массива при закрытии приложения
+        if let items = defaults.array(forKey: "MyToDoListArray") as? [String] {
+            toDoListArray = items
+        }
     }
 
     //MARK - Методы данных для таблицы
@@ -78,6 +86,9 @@ class ToDoListViewController: UITableViewController {
             if textField.text != "" {
                 //добавление новой записи в массив данных
                 self.toDoListArray.append(textField.text!)
+                
+                //код для сохранения добавленных значений при закрытии приложения
+                self.defaults.set(self.toDoListArray, forKey: "MyToDoListArray")
                 
                 //обновляем окно для отображения новой добавленной записи польщователем
                 self.tableView.reloadData()
